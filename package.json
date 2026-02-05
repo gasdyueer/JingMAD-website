@@ -1,0 +1,39 @@
+{
+  "name": "jingmad-website",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "静止画MAD展览网站 - 一个展示静止画MAD作品的交互式画廊",
+  "keywords": ["MAD", "静止画", "gallery", "exhibition", "GSAP", "TypeScript", "Vite"],
+  "author": "Social Death",
+  "license": "MIT",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build && npm run copy-images",
+    "preview": "vite preview",
+    "prebuild": "npm run type-check",
+    "type-check": "tsc --noEmit",
+    "lint": "echo 'No linter configured'",
+    "clean": "rm -rf dist",
+    "deploy": "npm run build",
+    "copy-images": "node scripts/copy-images.js"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "^22.14.0",
+    "typescript": "~5.8.2",
+    "vite": "^6.2.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gasdyueer/JingMAD-website.git"
+  },
+  "bugs": {
+    "url": "https://github.com/gasdyueer/JingMAD-website/issues"
+  },
+  "homepage": "https://gasdyueer.github.io/JingMAD-website"
+}
