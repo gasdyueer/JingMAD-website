@@ -83,7 +83,7 @@
         #gallery-container { padding-bottom: 100px; max-width: 1400px; margin: 0 auto; }
         .mad-card { display: flex; align-items: center; justify-content: center; min-height: 70vh; padding: 2rem; position: relative; margin-bottom: 5rem; opacity: 0; }
         .mad-card:nth-child(odd) { flex-direction: row; }
-        .mad-card:nth-child(even) { flex-direction: row-reverse; text-align: right; }
+        .mad-card:nth-child(even) { flex-direction: row-reverse; text-align: left; }
         
         .card-visual { flex: 1.5; position: relative; aspect-ratio: 16/9; overflow: hidden; background: var(--bg-card); border: 1px solid var(--grid-line); }
         .card-img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.2); }
@@ -98,14 +98,12 @@
         .mad-card:nth-child(even) .card-rank { right: -2rem; transform: translateY(-50%); }
 
         .card-title { font-size: 2.5rem; text-transform: uppercase; margin-bottom: 0.5rem; line-height: 1.1; }
-        .card-meta { font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 1.5rem; display: flex; flex-direction: column; gap: 0.2rem; }
-        .mad-card:nth-child(even) .card-meta { align-items: flex-end; }
+        .card-meta { font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 1.5rem; display: flex; flex-direction: column; gap: 0.2rem; align-items: flex-start; }
         
         .card-comment { font-size: 1rem; line-height: 1.6; color: #ccc; border-left: 2px solid var(--accent-global); padding-left: 1rem; margin-bottom: 1.5rem; }
-        .mad-card:nth-child(even) .card-comment { border-left: none; border-right: 2px solid var(--accent-global); padding-left: 0; padding-right: 1rem; }
+        .mad-card:nth-child(even) .card-comment { border-left: 2px solid var(--accent-global); border-right: none; padding-left: 1rem; padding-right: 0; }
 
-        .card-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
-        .mad-card:nth-child(even) .card-tags { justify-content: flex-end; }
+        .card-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: flex-start; }
         .tag { border: 1px solid var(--grid-line); padding: 0.2rem 0.6rem; font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-secondary); text-transform: uppercase; transition: 0.2s; }
         .tag:hover { border-color: var(--accent-global); color: var(--accent-global); background: rgba(255,0,85,0.1); }
 
@@ -116,7 +114,7 @@
             .timeline-nav { display: none; }
             .progress-bar { display: block; }
             .mad-card, .mad-card:nth-child(even) { flex-direction: column; text-align: left; padding: 1rem; margin-bottom: 3rem; }
-            .mad-card:nth-child(even) .card-meta, .mad-card:nth-child(even) .card-tags { align-items: flex-start; justify-content: flex-start; }
+            .card-meta, .card-tags { align-items: flex-start; justify-content: flex-start; }
             .mad-card:nth-child(even) .card-comment { border-right: none; border-left: 2px solid var(--accent-global); padding-right: 0; padding-left: 1rem; }
             .card-visual { width: 100%; margin-bottom: 1.5rem; }
             .card-rank { font-size: 6rem; top: 0; left: 0 !important; right: auto !important; opacity: 0.5 !important; }
@@ -131,12 +129,12 @@
         <aside class="timeline-nav"><div class="timeline-ruler" id="nav-ruler"></div></aside>
         <div class="content-wrapper">
             <header>
-                <h1 class="glitch-text" data-text="静止画 MAD">静止画 MAD</h1>
+                <h1 class="glitch-text" data-text="我最喜欢的100个静止画 MAD">我最喜欢的100个静止画 MAD</h1>
                 <div class="header-meta">
                     <p>存档版本：1.0.0 // 向下滚动以探索</p>
                 </div>
                 <div class="header-meta">
-                    <p>本项目在 ：</p>
+                    <p>本网页中所有MAD均可以通过在Bilibili搜索找到</p>
                 </div>
             </header>
             <div class="search-container">
