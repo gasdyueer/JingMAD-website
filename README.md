@@ -85,11 +85,45 @@ MAD数据存储在 `database.ts` 和 `mad_list.md` 中。要添加新的MAD作�
 
 ## 🌐 部署
 
-### GitHub Pages
+### GitHub Pages (推荐使用 gh-pages 分支)
 
-1. 构建项目：`npm run build`
-2. 将 `dist` 目录推送到 `gh-pages` 分支
-3. 在GitHub仓库设置中启用GitHub Pages
+#### 方法一：使用 gh-pages 工具（最简单）
+
+1. 安装依赖并构建：
+   ```bash
+   npm install
+   npm run build
+   ```
+
+2. 部署到 gh-pages 分支：
+   ```bash
+   npm run deploy:gh
+   ```
+
+3. 配置 GitHub Pages：
+   - 访问 https://github.com/gasdyueer/JingMAD-website/settings/pages
+   - **Source**: 选择 `Deploy from a branch`
+   - **Branch**: 选择 `gh-pages`
+   - **Folder**: 选择 `/ (root)`
+   - 点击 **Save**
+
+4. 等待几分钟，访问：https://gasdyueer.github.io/JingMAD-website
+
+#### 方法二：手动部署
+
+1. 构建项目：
+   ```bash
+   npm run build
+   ```
+
+2. 切换到 gh-pages 分支并推送：
+   ```bash
+   git checkout --orphan gh-pages
+   git --work-tree dist add --all
+   git --work-tree dist commit -m "Deploy to GitHub Pages"
+   git push origin HEAD:gh-pages --force
+   git checkout main
+   ```
 
 ### 其他平台
 
@@ -98,6 +132,10 @@ MAD数据存储在 `database.ts` 和 `mad_list.md` 中。要添加新的MAD作�
 - Netlify
 - Cloudflare Pages
 - AWS S3
+
+### 详细部署指南
+
+查看 [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md) 获取完整的部署说明和故障排除。
 
 ## 📄 许可证
 
