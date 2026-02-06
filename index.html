@@ -1,0 +1,194 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STILL IMAGE MAD EXHIBITION</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+
+    <!-- External Libraries (GSAP + ScrollTrigger + Lenis) -->
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+
+    <!-- Styles -->
+    <style>
+        :root {
+            --bg-main: #050505;
+            --bg-card: #111111;
+            --text-primary: #ffffff;
+            --text-secondary: #888888;
+            --accent-global: #FF0055;
+            --grid-line: rgba(255, 255, 255, 0.05);
+            --sidebar-width: 60px;
+            --font-display: 'Rajdhani', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-primary);
+            font-family: var(--font-display);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Utilities */
+        .hidden { display: none !important; }
+        .glitch-text { position: relative; }
+        .glitch-text::before, .glitch-text::after {
+            content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-main);
+        }
+        .glitch-text::before { left: 2px; text-shadow: -1px 0 red; clip: rect(24px, 550px, 90px, 0); animation: glitch-1 2s infinite linear alternate-reverse; }
+        .glitch-text::after { left: -2px; text-shadow: -1px 0 blue; clip: rect(85px, 550px, 140px, 0); animation: glitch-2 2s infinite linear alternate-reverse; }
+        @keyframes glitch-1 { 0% { clip: rect(20px, 9999px, 10px, 0); } 100% { clip: rect(90px, 9999px, 100px, 0); } }
+        @keyframes glitch-2 { 0% { clip: rect(120px, 9999px, 10px, 0); } 100% { clip: rect(10px, 9999px, 90px, 0); } }
+
+        /* App Layout */
+        #app { display: flex; min-height: 100vh; }
+        
+        .timeline-nav {
+            position: fixed; left: 0; top: 0; width: var(--sidebar-width); height: 100vh;
+            border-right: 1px solid var(--grid-line); background: var(--bg-main); z-index: 100;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+        }
+        .timeline-ruler { height: 80%; display: flex; flex-direction: column; justify-content: space-between; align-items: center; font-family: var(--font-mono); font-size: 12px; color: var(--text-secondary); }
+        .timeline-mark { cursor: pointer; transition: 0.3s; }
+        .timeline-mark:hover { color: var(--accent-global); transform: scale(1.2); }
+
+        .progress-bar { position: fixed; top: 0; left: 0; height: 4px; background: var(--accent-global); width: 0%; z-index: 200; display: none; }
+
+        .content-wrapper {
+            flex: 1; margin-left: var(--sidebar-width); position: relative;
+            background-image: linear-gradient(var(--grid-line) 1px, transparent 1px), linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+
+        header { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+        h1 { font-size: 5rem; line-height: 1; letter-spacing: -2px; text-transform: uppercase; margin-bottom: 1rem; }
+        .header-meta { font-family: var(--font-mono); color: var(--text-secondary); font-size: 0.9rem; border: 1px solid var(--grid-line); padding: 0.5rem 1rem; background: rgba(0,0,0,0.5); backdrop-filter: blur(5px); }
+
+        .search-container { position: sticky; top: 20px; z-index: 90; width: 100%; display: flex; justify-content: center; margin-bottom: 100px; pointer-events: none; }
+        .search-input { pointer-events: auto; background: rgba(17, 17, 17, 0.8); border: 1px solid var(--grid-line); color: var(--text-primary); padding: 1rem 2rem; font-family: var(--font-mono); font-size: 1rem; width: 400px; backdrop-filter: blur(10px); outline: none; text-transform: uppercase; }
+        .search-input:focus { border-color: var(--accent-global); box-shadow: 0 0 15px rgba(255, 0, 85, 0.2); }
+
+        /* Gallery */
+        #gallery-container { padding-bottom: 100px; max-width: 1400px; margin: 0 auto; }
+        .mad-card { display: flex; align-items: center; justify-content: center; min-height: 70vh; padding: 2rem; position: relative; margin-bottom: 5rem; opacity: 0; }
+        .mad-card:nth-child(odd) { flex-direction: row; }
+        .mad-card:nth-child(even) { flex-direction: row-reverse; text-align: left; }
+        
+        .card-visual { flex: 1.5; position: relative; aspect-ratio: 16/9; overflow: hidden; background: var(--bg-card); border: 1px solid var(--grid-line); }
+        .card-img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.2); }
+        .scanline-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: repeating-linear-gradient(to bottom, transparent 0px, transparent 2px, rgba(0,0,0,0.3) 3px); pointer-events: none; z-index: 2; }
+        
+        .no-signal { display: flex; justify-content: center; align-items: center; background: #222; color: var(--text-secondary); font-family: var(--font-mono); letter-spacing: 2px; flex-direction: column; }
+        .no-signal::before { content: "NO SIGNAL"; font-weight: bold; }
+
+        .card-info { flex: 1; padding: 2rem; position: relative; z-index: 2; }
+        .card-rank { font-family: var(--font-display); font-size: 12rem; font-weight: 700; position: absolute; top: 50%; z-index: -1; line-height: 0; opacity: 0; color: transparent; -webkit-text-stroke: 2px rgba(255,255,255,0.1); user-select: none; }
+        .mad-card:nth-child(odd) .card-rank { left: -2rem; transform: translateY(-50%); }
+        .mad-card:nth-child(even) .card-rank { right: -2rem; transform: translateY(-50%); }
+
+        .card-title { font-size: 2.5rem; text-transform: uppercase; margin-bottom: 0.5rem; line-height: 1.1; }
+        .card-meta { font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 1.5rem; display: flex; flex-direction: column; gap: 0.2rem; align-items: flex-start; }
+        
+        .card-comment { font-size: 1rem; line-height: 1.6; color: #ccc; border-left: 2px solid var(--accent-global); padding-left: 1rem; margin-bottom: 1.5rem; }
+        .mad-card:nth-child(even) .card-comment { border-left: 2px solid var(--accent-global); border-right: none; padding-left: 1rem; padding-right: 0; }
+
+        .card-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: flex-start; }
+        .tag { border: 1px solid var(--grid-line); padding: 0.2rem 0.6rem; font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-secondary); text-transform: uppercase; transition: 0.2s; }
+        .tag:hover { border-color: var(--accent-global); color: var(--accent-global); background: rgba(255,0,85,0.1); }
+
+        .reminder-section {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+            background: var(--bg-main);
+            border-bottom: 1px solid var(--grid-line);
+        }
+        .reminder-text {
+            font-size: 4rem;
+            font-weight: 700;
+            color: var(--accent-global);
+            font-family: var(--font-display);
+            line-height: 1.2;
+            max-width: 1200px;
+            margin-bottom: 2rem;
+            text-transform: uppercase;
+        }
+        .reminder-subtext {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            font-family: var(--font-mono);
+            max-width: 800px;
+        }
+        @media (max-width: 768px) {
+            .reminder-text {
+                font-size: 2.5rem;
+            }
+            .reminder-subtext {
+                font-size: 1rem;
+            }
+        }
+
+        footer { height: 200px; display: flex; justify-content: center; align-items: center; border-top: 1px solid var(--grid-line); font-family: var(--font-mono); color: var(--text-secondary); text-align: center; }
+
+        @media (max-width: 768px) {
+            :root { --sidebar-width: 0px; }
+            .timeline-nav { display: none; }
+            .progress-bar { display: block; }
+            .mad-card, .mad-card:nth-child(even) { flex-direction: column; text-align: left; padding: 1rem; margin-bottom: 3rem; }
+            .card-meta, .card-tags { align-items: flex-start; justify-content: flex-start; }
+            .mad-card:nth-child(even) .card-comment { border-right: none; border-left: 2px solid var(--accent-global); padding-right: 0; padding-left: 1rem; }
+            .card-visual { width: 100%; margin-bottom: 1.5rem; }
+            .card-rank { font-size: 6rem; top: 0; left: 0 !important; right: auto !important; opacity: 0.5 !important; }
+            h1 { font-size: 3rem; }
+        }
+    </style>
+<link rel="stylesheet" href="/index.css">
+  <script type="module" crossorigin src="/JingMAD-website/assets/index-BQYl8GqI.js"></script>
+</head>
+<body>
+    <div class="progress-bar"></div>
+    <div id="app">
+        <aside class="timeline-nav"><div class="timeline-ruler" id="nav-ruler"></div></aside>
+        <div class="content-wrapper">
+            <header>
+                <h1 class="glitch-text" data-text="我最喜欢的100个静止画 MAD">我最喜欢的100个静止画 MAD</h1>
+                <div class="header-meta">
+                    <p>存档版本：1.0.0 // 向下滚动以探索</p>
+                </div>
+                <div class="header-meta">
+                    <p>本网页中所有MAD均可以通过在Bilibili搜索找到</p>
+                </div>
+                <div class="header-meta">
+                    <p>可通过点击左侧数字实现快速跳转</p>
+                </div>
+            </header>
+            <section class="reminder-section">
+                <div class="reminder-text">请注意：本网站内容为个人收藏，<br>仅供学习交流。<br><br>评语全是一时兴起的怪话，图一乐就好。 </div>
+                <div class="reminder-subtext">所有 MAD 作品版权归原作者所有，请支持原创。</div>
+            </section>
+            <div class="search-container">
+                <input type="text" id="search-input" class="search-input" placeholder="搜索 标题 或 作者 以寻找 MAD">
+            </div>
+            <main id="gallery-container"></main>
+            <footer>
+                <div><p>已到达终点，其实我看过的MAD远不止于此。</p><p style="font-size: 0.8rem; margin-top: 0.5rem;">Social Death</p></div>
+            </footer>
+        </div>
+    </div>
+</body>
+</html>
