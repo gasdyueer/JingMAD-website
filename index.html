@@ -107,6 +107,42 @@
         .tag { border: 1px solid var(--grid-line); padding: 0.2rem 0.6rem; font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-secondary); text-transform: uppercase; transition: 0.2s; }
         .tag:hover { border-color: var(--accent-global); color: var(--accent-global); background: rgba(255,0,85,0.1); }
 
+        .reminder-section {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+            background: var(--bg-main);
+            border-bottom: 1px solid var(--grid-line);
+        }
+        .reminder-text {
+            font-size: 4rem;
+            font-weight: 700;
+            color: var(--accent-global);
+            font-family: var(--font-display);
+            line-height: 1.2;
+            max-width: 1200px;
+            margin-bottom: 2rem;
+            text-transform: uppercase;
+        }
+        .reminder-subtext {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            font-family: var(--font-mono);
+            max-width: 800px;
+        }
+        @media (max-width: 768px) {
+            .reminder-text {
+                font-size: 2.5rem;
+            }
+            .reminder-subtext {
+                font-size: 1rem;
+            }
+        }
+
         footer { height: 200px; display: flex; justify-content: center; align-items: center; border-top: 1px solid var(--grid-line); font-family: var(--font-mono); color: var(--text-secondary); text-align: center; }
 
         @media (max-width: 768px) {
@@ -136,7 +172,14 @@
                 <div class="header-meta">
                     <p>本网页中所有MAD均可以通过在Bilibili搜索找到</p>
                 </div>
+                <div class="header-meta">
+                    <p>可通过点击左侧数字实现快速跳转</p>
+                </div>
             </header>
+            <section class="reminder-section">
+                <div class="reminder-text">请注意：本网站内容为个人收藏，<br>仅供学习交流。<br><br>评语全是一时兴起的怪话，图一乐就好。 </div>
+                <div class="reminder-subtext">所有 MAD 作品版权归原作者所有，请支持原创。</div>
+            </section>
             <div class="search-container">
                 <input type="text" id="search-input" class="search-input" placeholder="搜索 标题 或 作者 以寻找 MAD">
             </div>
