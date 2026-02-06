@@ -92,6 +92,7 @@ function generateSafeFilename(title: string): string {
 /**
  * 生成图片路径
  * 由于mad_imgs被设置为publicDir，图片应该通过根路径访问
+ * 注意：在 GitHub Pages 上，路径需要包含仓库名
  */
 function generateImagePath(filename: string): string {
   // 对于public目录中的文件，直接使用原始文件名
@@ -102,7 +103,9 @@ function generateImagePath(filename: string): string {
   // 使用环境变量中的 BASE_URL，如果未定义则使用根路径
   // 在 vite.config.ts 中我们定义了 process.env.BASE_URL
   const baseUrl = (process.env.BASE_URL || '/').replace(/\/$/, '');
-  return `${baseUrl}/${safeFilename}`;
+  
+  // 图片在 mad_imgs 目录中
+  return `${baseUrl}/mad_imgs/${safeFilename}`;
 }
 
 /**
