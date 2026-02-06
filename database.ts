@@ -143,10 +143,10 @@ function finalizeItem(item: Partial<MadItem>, rank: number): void {
   }
 
   // 生成图片路径：根据标题在mad_imgs目录中查找图片
-  // 首先尝试.png，然后尝试.jpg（因为大部分图片是.png格式）
+  // 首先尝试.jpg，然后尝试.png（因为大部分图片是.png格式）
   const titleForFilename = generateSafeFilename(item.title!);
   
-  const possibleExtensions = ['.png', '.jpg', '.jpeg', '.webp', '.gif'];
+  const possibleExtensions = ['.jpg', '.png', '.jpeg', '.webp', '.gif'];
   let foundImage = false;
   
   for (const ext of possibleExtensions) {
