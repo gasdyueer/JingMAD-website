@@ -7,6 +7,8 @@ const __dirname = path.dirname(__filename);
 
 const sourceDir = path.join(__dirname, '..', 'mad_imgs');
 const targetDir = path.join(__dirname, '..', 'dist', 'mad_imgs');
+const rootDir = path.join(__dirname, '..');
+const distDir = path.join(__dirname, '..', 'dist');
 
 function copyImages() {
   try {
@@ -64,6 +66,18 @@ function copyImages() {
       copiedFiles.forEach(file => {
         console.log(`  - ${file}`);
       });
+    }
+    
+    // 复制 .nojekyll 文件到 dist 根目录
+    const nojekyllSource = path.join(rootDir, '.nojekyll');
+    const nojekyllTarget = path.join(distDir, '.nojekyll');
+    if (fs.existsSync(nojekyllSource)) {
+      fs.copyFileSync(nojekyllSource, nojekyllTarget);
+      console.log('\n已复制 .nojekyll 文件到 dist 根目录');
+    } else {
+      console.log('\n警告: .nojekyll 文件不存在，将创建默认文件');
+      fs.writeFileSync(nojekyllTarget, '# 禁用 GitHub Pages 的 Jekyll 处理\n');
+      console.log('已创建默认 .nojekyll 文件');
     }
     
   } catch (error) {

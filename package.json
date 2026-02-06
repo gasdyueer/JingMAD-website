@@ -10,13 +10,16 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build && npm run copy-images",
+    "build:gh-pages": "set NODE_ENV=production && vite build",
     "preview": "vite preview",
     "prebuild": "npm run type-check",
     "type-check": "tsc --noEmit",
     "lint": "echo 'No linter configured'",
-    "clean": "rm -rf dist",
+    "clean": "if exist dist rmdir /s /q dist",
     "deploy": "npm run build",
-    "copy-images": "node scripts/copy-images.js"
+    "deploy:gh-pages": "npm run build:gh-pages",
+    "copy-images": "node scripts/copy-images.js",
+    "test:build": "npm run clean && npm run build"
   },
   "dependencies": {},
   "devDependencies": {

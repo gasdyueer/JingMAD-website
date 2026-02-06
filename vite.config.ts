@@ -1,10 +1,15 @@
 import path from 'path';
-import { defineConfig, loadEnv } from 'vite';
+import { defineConfig } from 'vite';
 
 
 export default defineConfig(({ mode }) => {
-    const env = loadEnv(mode, '.', '');
+    // 根据环境变量设置 base URL
+    // 在 GitHub Pages 上，仓库名称为 'JingMAD-website'，所以 base 应为 '/JingMAD-website/'
+    // 本地开发时使用根路径
+    const base = process.env.NODE_ENV === 'production' ? '/JingMAD-website/' : '/';
+    
     return {
+      base,
       server: {
         port: 3000,
         host: 'localhost',
@@ -20,8 +25,7 @@ export default defineConfig(({ mode }) => {
       },
       plugins: [],
       define: {
-        'process.env.API_KEY': JSON.stringify(env.GEMINI_API_KEY),
-        'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY),
+        'process.env.BASE_URL': JSON.stringify(base),
       },
       resolve: {
         alias: {
@@ -42,6 +46,8 @@ export default defineConfig(({ mode }) => {
         },
         // 复制public目录到dist
         copyPublicDir: true,
+        // 输出目录为 dist
+        outDir: 'dist',
       },
       publicDir: 'mad_imgs', // 将mad_imgs设为公共目录，这样图片可以直接通过相对路径访问
       // 包含所有图片格式和markdown文件

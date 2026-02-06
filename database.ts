@@ -98,8 +98,11 @@ function generateImagePath(filename: string): string {
   // 现代浏览器能正确处理包含中文和特殊字符的URL
   // 只需要编码空格为%20
   const safeFilename = filename.replace(/ /g, '%20');
-  // 直接使用根路径，因为mad_imgs是public目录
-  return `/${safeFilename}`;
+  
+  // 使用环境变量中的 BASE_URL，如果未定义则使用根路径
+  // 在 vite.config.ts 中我们定义了 process.env.BASE_URL
+  const baseUrl = (process.env.BASE_URL || '/').replace(/\/$/, '');
+  return `${baseUrl}/${safeFilename}`;
 }
 
 /**
