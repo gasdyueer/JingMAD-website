@@ -3,10 +3,13 @@ import { defineConfig } from 'vite';
 
 
 export default defineConfig(({ mode }) => {
-    // 根据环境变量设置 base URL
+    // 根据构建模式设置 base URL
     // 在 GitHub Pages 上，仓库名称为 'JingMAD-website'，所以 base 应为 '/JingMAD-website/'
     // 本地开发时使用根路径
-    const base = process.env.NODE_ENV === 'production' ? '/JingMAD-website/' : '/';
+    // 使用 mode 参数来判断，mode 为 'production' 时使用仓库路径
+    const base = mode === 'production' ? '/JingMAD-website/' : '/';
+    
+    console.log(`Vite build mode: ${mode}, base path: ${base}`);
     
     return {
       base,

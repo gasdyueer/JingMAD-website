@@ -10,7 +10,7 @@
   "scripts": {
   "dev": "vite",
   "build": "vite build && npm run copy-images",
-  "build:gh-pages": "set NODE_ENV=production && vite build",
+  "build:gh-pages": "vite build --mode production",
   "preview": "vite preview",
   "prebuild": "npm run type-check",
   "type-check": "tsc --noEmit",
@@ -20,7 +20,7 @@
   "deploy:gh-pages": "npm run build:gh-pages",
   "copy-images": "node scripts/copy-images.js",
   "test:build": "npm run clean && npm run build",
-  "predeploy": "npm run build",
+  "predeploy": "npm run build:gh-pages && npm run copy-images",
   "deploy:gh": "gh-pages -d dist"
 },
   "dependencies": {},
